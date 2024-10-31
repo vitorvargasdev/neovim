@@ -17,3 +17,5 @@ vim.keymap.set("n", "tw", ":w<CR>")
 
 vim.keymap.set("n", "<leader>c", ":b#|bd#<CR>")
 vim.keymap.set("n", "<leader>bC", ":bufdo bd<CR>")
+
+vim.keymap.set("n", "tq", ":qa!<CR>")
