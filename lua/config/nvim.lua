@@ -4,6 +4,9 @@ vim.cmd("set softtabstop=2")
 vim.cmd("set shiftwidth=2")
 vim.cmd("set nu")
 vim.cmd("set relativenumber")
+vim.cmd("set ignorecase")
+vim.cmd("set smartcase")
+
 vim.g.mapleader = " "
 
 vim.keymap.set("n", "<C-h>", "<C-w>h")
@@ -15,7 +18,7 @@ vim.keymap.set("n", "ty", ":bn<CR>")
 vim.keymap.set("n", "tr", ":bp<CR>")
 vim.keymap.set("n", "tw", ":w<CR>")
 
-vim.keymap.set("n", "<leader>c", ":b#|bd#<CR>")
-vim.keymap.set("n", "<leader>bC", ":bufdo bd<CR>")
+vim.keymap.set("n", "<leader>dd", ":bd<CR>")
+vim.keymap.set("n", "<leader>Da", ":bufdo bd<CR>")
 
 vim.keymap.set("n", "tq", ":qa!<CR>")
