@@ -11,7 +11,17 @@ return {
     "neovim/nvim-lspconfig",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "vtsls" },
+        ensure_installed = {
+          "lua_ls",
+          "vtsls",
+          "gopls",
+          "golangci-lint",
+          "typescript-language-server",
+          "vue-language-server",
+          "intelephense",
+          "php-cs-fixer",
+          "terraform-ls",
+        },
       })
     end,
   },
@@ -28,6 +38,18 @@ return {
       })
 
       lspconfig.vtsls.setup({
+        capabilities = capabilities,
+      })
+
+      lspconfig.gopls.setup({
+        capabilities = capabilities,
+      })
+
+      lspconfig.intelephense.setup({
+        capabilities = capabilities,
+      })
+
+      lspconfig.terraformls.setup({
         capabilities = capabilities,
       })
 

@@ -1,11 +1,53 @@
 return {
-
   "yetone/avante.nvim",
   event = "VeryLazy",
-  lazy = false,
-  version = false, -- set this if you want to always pull the latest change
+  version = false, -- Never set this value to "*"! Never!
   opts = {
-    -- add any opts here
+    provider = "ollama",
+    ollama = {
+      endpoint = "http://localhost:11434",
+      model = "qwen2.5-coder:7b",
+      stream = true,
+      -- add a new route called getActivityPerId
+    },
+    behaviour = {
+      --- ... existing behaviours
+      enable_cursor_planning_mode = true, -- enable cursor planning mode!
+      auto_suggestions = false,         -- Experimental stage
+    },
+    rag_service = {
+      enabled = true,                -- Enables the RAG service
+      host_mount = os.getenv("HOME"), -- Host mount path for the rag service
+      provider = "ollama",           -- The provider to use for RAG service (e.g. openai or ollama)
+      llm_model = "qwen2.5-coder:1.5b", -- The LLM model to use for RAG service
+      embed_model = "nomic-embed-text", -- The embedding model to use for RAG service
+    },
+    vendors = {
+      deepseek8b = {
+        __inherited_from = "ollama",
+        model = "deepseek-r1:8b",
+      },
+      deepseek14b = {
+        __inherited_from = "ollama",
+        model = "deepseek-r1:14b",
+      },
+      codegemma = {
+        __inherited_from = "ollama",
+        model = "codegemma:latest",
+      },
+      codegemma2b = {
+        __inherited_from = "ollama",
+        model = "codegemma:2b",
+      },
+      llama = {
+        __inherited_from = "ollama",
+        model = "llama3.1:8b",
+      },
+      deepseekcoder = {
+        __inherited_from = "ollama",
+        model = "deepseek-coder:1.3b",
+      },
+    },
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
   build = "make",
@@ -16,7 +58,12 @@ return {
     "nvim-lua/plenary.nvim",
     "MunifTanjim/nui.nvim",
     --- The below dependencies are optional,
+    "echasnovski/mini.pick",       -- for file_selector provider mini.pick
+    "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+    "hrsh7th/nvim-cmp",            -- autocompletion for avante commands and mentions
+    "ibhagwan/fzf-lua",            -- for file_selector provider fzf
     "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+    "zbirenbaum/copilot.lua",      -- for providers='copilot'
     {
       -- support for image pasting
       "HakonHarnes/img-clip.nvim",
@@ -43,66 +90,4 @@ return {
       ft = { "markdown", "Avante" },
     },
   },
-  config = function()
-    require("avante").setup({
-      provider = "ollama",
-      vendors = {
-        ollama = {
-          ["local"] = true,
-          endpoint = "127.0.0.1:11434/v1",
-          model = "codellama:code",
-          parse_curl_args = function(opts, code_opts)
-            return {
-              url = opts.endpoint .. "/chat/completions",
-              headers = {
-                ["Accept"] = "application/json",
-                ["Content-Type"] = "application/json",
-                ["x-api-key"] = "ollama",
-              },
-              body = {
-                model = opts.model,
-                messages = require("avante.providers").copilot.parse_message(code_opts), -- you can make your own message, but this is very advanced
-                max_tokens = 2048,
-                stream = true,
-              },
-            }
-          end,
-          parse_response_data = function(data_stream, event_state, opts)
-            require("avante.providers").openai.parse_response(data_stream, event_state, opts)
-          end,
-        },
-      },
-      behaviour = {
-        auto_suggestions = false,
-        auto_set_highlight_group = true,
-        auto_set_keymaps = true,
-        auto_apply_diff_after_generation = false,
-        support_paste_from_clipboard = true,
-      },
-      hints = { enabled = true },
-      windows = {
-        ---@type "right" | "left" | "top" | "bottom"
-        position = "right", -- the position of the sidebar
-        wrap = true,    -- similar to vim.o.wrap
-        width = 30,     -- default % based on available width
-        sidebar_header = {
-          align = "center", -- left, center, right for title
-          rounded = true,
-        },
-      },
-      highlights = {
-        ---@type AvanteConflictHighlights
-        diff = {
-          current = "DiffText",
-          incoming = "DiffAdd",
-        },
-      },
-      --- @class AvanteConflictUserConfig
-      diff = {
-        autojump = true,
-        ---@type string | fun(): any
-        list_opener = "copen",
-      },
-    })
-  end,
 }
