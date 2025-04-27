@@ -6,7 +6,7 @@ return {
     config = function()
       require("minuet").setup({
         provider = "openai_fim_compatible",
-        n_completions = 5, -- recommend for local model for resource saving
+        n_completions = 2, -- recommend for local model for resource saving
         -- I recommend beginning with a small context window size and incrementally
         -- expanding it, depending on your local computing power. A context window
         -- of 512, serves as an good starting point to estimate your computing
