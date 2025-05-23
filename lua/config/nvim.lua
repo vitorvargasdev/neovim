@@ -3,11 +3,12 @@ vim.cmd("set tabstop=2")
 vim.cmd("set softtabstop=2")
 vim.cmd("set shiftwidth=2")
 vim.cmd("set nu")
-vim.cmd("set relativenumber")
+-- vim.cmd("set relativenumber")
 vim.cmd("set ignorecase")
 vim.cmd("set smartcase")
 -- vim.cmd("set splitbelow")
 vim.cmd("set splitright")
+vim.cmd("set title")
 
 vim.g.mapleader = " "
 
@@ -30,3 +31,7 @@ vim.keymap.set("n", "tq", ":qa!<CR>")
 vim.keymap.set("n", "<leader>avm", ":AvanteModels<CR>")
 vim.keymap.set("n", "<leader>avc", ":AvanteClear<CR>")
 
+vim.opt.titlestring = table.concat({
+  "%{fnamemodify(getcwd(),':t')}",    -- CWD basename :contentReference[oaicite:0]{index=0}
+  "%t",                               -- filename only :contentReference[oaicite:1]{index=1}
+}, " ")

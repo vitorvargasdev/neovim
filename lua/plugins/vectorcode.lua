@@ -16,11 +16,11 @@ return {
       end
 
       -- roughly equate to 2000 tokens for LLM
-      local RAG_Context_Window_Size = 16000
+      local RAG_Context_Window_Size = 2000
 
       provider_options = {
         openai_fim_compatible = { -- or codestral
-          model = "qwen-2.5-coder:14b",
+          model = "qwen-2.5-coder:7b",
           template = {
             prompt = function(pref, suff, _)
               local prompt_message = ""

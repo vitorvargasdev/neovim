@@ -1,11 +1,12 @@
 return {
   {
-    "milanglacier/minuet-ai.nvim",
-    -- dir = "~/dev/projects/minuet-ai.nvim",
-    -- dev = true,
+    -- "milanglacier/minuet-ai.nvim",
+    dir = "~/dev/projects/minuet-ai.nvim",
+    dev = true,
     config = function()
       require("minuet").setup({
         provider = "openai_fim_compatible",
+        request_timeout = 5,
         n_completions = 2, -- recommend for local model for resource saving
         -- I recommend beginning with a small context window size and incrementally
         -- expanding it, depending on your local computing power. A context window
@@ -25,21 +26,21 @@ return {
             },
           },
         },
-        virtualtext = {
-          auto_trigger_ft = { "*" },
-          keymap = {
-            -- accept whole completion
-            accept = "<C-k>",
-            -- accept_word = "<C-j>",
-            -- accept one line
-            accept_line = "<C-j>",
-            -- accept n lines (prompts for number)
-            -- e.g. "A-z 2 CR" will accept 2 lines
-            -- accept_n_lines = "<C-l>",
-            prev = "<C-h>",
-            next = "<C-l>",
-          },
-        },
+        -- virtualtext = {
+        --   auto_trigger_ft = { "*" },
+        --   keymap = {
+        --     -- accept whole completion
+        --     accept = "<C-k>",
+        --     accept_word = "<C-j>",
+        --     -- accept one line
+        --     -- accept_line = "<C-j>",
+        --     -- accept n lines (prompts for number)
+        --     -- e.g. "A-z 2 CR" will accept 2 lines
+        --     -- accept_n_lines = "<C-l>",
+        --     prev = "<C-h>",
+        --     next = "<C-l>",
+        --   },
+t       -- },
       })
     end,
   },
