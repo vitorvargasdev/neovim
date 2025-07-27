@@ -3,7 +3,7 @@ vim.cmd("set tabstop=2")
 vim.cmd("set softtabstop=2")
 vim.cmd("set shiftwidth=2")
 vim.cmd("set nu")
--- vim.cmd("set relativenumber")
+vim.cmd("set relativenumber")
 vim.cmd("set ignorecase")
 vim.cmd("set smartcase")
 -- vim.cmd("set splitbelow")
@@ -27,11 +27,18 @@ vim.keymap.set("n", "<leader>daa", ":bufdo bd<CR>")
 
 vim.keymap.set("n", "tq", ":qa!<CR>")
 
+vim.keymap.set("n", "<leader>lp", ":LspRestart volar<CR>:LspRestart vtsls<CR>")
+
 -- Avante keymaps
 vim.keymap.set("n", "<leader>avm", ":AvanteModels<CR>")
 vim.keymap.set("n", "<leader>avc", ":AvanteClear<CR>")
 
+vim.keymap.set("n", "=", [[<cmd>vertical resize +5<cr>]]) -- make the window biger vertically
+vim.keymap.set("n", "-", [[<cmd>vertical resize -5<cr>]]) -- make the window smaller vertically
+vim.keymap.set("n", "+", [[<cmd>horizontal resize +2<cr>]]) -- make the window bigger horizontally by pressing shift and =
+vim.keymap.set("n", "_", [[<cmd>horizontal resize -2<cr>]]) -- make the window smaller horizontally by pressing shift and -
+
 vim.opt.titlestring = table.concat({
   "%{fnamemodify(getcwd(),':t')}",    -- CWD basename :contentReference[oaicite:0]{index=0}
   "%t",                               -- filename only :contentReference[oaicite:1]{index=1}
-}, " ")
+}, " -- ")
