@@ -22,9 +22,10 @@ return {
 				["<C-f>"] = { "scroll_documentation_down", "fallback" },
 				["<C-.>"] = { "show", "show_documentation", "hide_documentation" },
 				["<C-e>"] = { "hide", "fallback" },
-				["<Tab>"] = { "select_and_accept", "fallback" },
-				["<C-n>"] = { "select_next", "fallback" },
-				["<C-p>"] = { "select_prev", "fallback" },
+				["<Tab>"] = { "select_and_accept", "snippet_forward", "fallback" },
+				["<S-Tab>"] = { "snippet_backward", "fallback" },
+				["<C-n>"] = { "select_next", "snippet_forward", "fallback" },
+				["<C-p>"] = { "select_prev", "snippet_backward", "fallback" },
 			},
 
 			appearance = {
@@ -33,10 +34,11 @@ return {
 			},
 
 			sources = {
-				default = { "lsp", "luasnip", "buffer", "path" },
+				default = { "lsp", "snippets", "buffer", "path" },
 			},
 
 			snippets = {
+				preset = "luasnip",
 				expand = function(snippet)
 					require("luasnip").lsp_expand(snippet)
 				end,
