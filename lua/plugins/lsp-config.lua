@@ -23,7 +23,6 @@ return {
           "terraform-ls",
           "css-lsp",
           "tailwindcss-language-server",
-          "eslint_d",
           "eslint-lsp",
         },
       })
@@ -33,7 +32,7 @@ return {
     "neovim/nvim-lspconfig",
     lazy = false,
     config = function()
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local capabilities = require("blink.cmp").get_lsp_capabilities()
       local lspconfig = require("lspconfig")
 
       -- Volar configuration for Vue.js
@@ -85,10 +84,6 @@ return {
 
       -- Tailwind CSS LSP
       lspconfig.tailwindcss.setup({
-        capabilities = capabilities,
-      })
-
-      lspconfig.eslint_d.setup({
         capabilities = capabilities,
       })
 
