@@ -28,6 +28,7 @@ return {
     vim.keymap.set("n", "<leader>ee", "<Cmd>Neotree toggle reveal_force_cwd<CR>")
     vim.keymap.set("n", "<leader>ef", "<Cmd>Neotree focus<CR>")
     vim.keymap.set("n", "<leader>bg", "<Cmd>Neotree toggle git_status right<CR>")
+    vim.keymap.set("n", "M", "<Cmd>Neotree toggle git_status right<CR>")
   end,
 }
 
