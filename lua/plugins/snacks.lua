@@ -122,7 +122,7 @@ return {
     },
     -- Highlight word references
     words = {
-      enabled = true,
+      enabled = false,
     },
     -- Better buffer deletion
     bufdelete = {
