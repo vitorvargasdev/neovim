@@ -6,6 +6,132 @@ return {
     require("snacks").setup(opts)
   end,
   opts = {
+    -- Dashboard (replacement for alpha.nvim)
+    dashboard = {
+      enabled = true,
+      width = 60,
+      pane_gap = 3,
+      preset = {
+        keys = {},
+        header = [[
+
+
+⠸⣷⣦⠤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣠⣤⠀⠀⠀
+⠀⠙⣿⡄⠈⠑⢄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠔⠊⠉⣿⡿⠁⠀⠀⠀
+⠀⠀⠈⠣⡀⠀⠀⠑⢄⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⠊⠁⠀⠀⣰⠟⠀⠀⠀⣀⣀
+⠀⠀⠀⠀⠈⠢⣄⠀⡈⠒⠊⠉⠁⠀⠈⠉⠑⠚⠀⠀⣀⠔⢊⣠⠤⠒⠊⠉⠀⡜
+⠀⠀⠀⠀⠀⠀⠀⡽⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠩⡔⠊⠁⠀⠀⠀⠀⠀⠀⠇
+⠀⠀⠀⠀⠀⠀⠀⡇⢠⡤⢄⠀⠀⠀⠀⠀⡠⢤⣄⠀⡇⠀⠀⠀⠀⠀⠀⠀⢰⠀
+⠀⠀⠀⠀⠀⠀⢀⠇⠹⠿⠟⠀⠀⠤⠀⠀⠻⠿⠟⠀⣇⠀⠀⡀⠠⠄⠒⠊⠁⠀
+⠀⠀⠀⠀⠀⠀⢸⣿⣿⡆⠀⠰⠤⠖⠦⠴⠀⢀⣶⣿⣿⠀⠙⢄⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢻⣿⠃⠀⠀⠀⠀⠀⠀⠀⠈⠿⡿⠛⢄⠀⠀⠱⣄⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢸⠈⠓⠦⠀⣀⣀⣀⠀⡠⠴⠊⠹⡞⣁⠤⠒⠉⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⣠⠃⠀⠀⠀⠀⡌⠉⠉⡤⠀⠀⠀⠀⢻⠿⠆⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠰⠁⡀⠀⠀⠀⠀⢸⠀⢰⠃⠀⠀⠀⢠⠀⢣⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⢶⣗⠧⡀⢳⠀⠀⠀⠀⢸⣀⣸⠀⠀⠀⢀⡜⠀⣸⢤⣶⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠈⠻⣿⣦⣈⣧⡀⠀⠀⢸⣿⣿⠀⠀⢀⣼⡀⣨⣿⡿⠁⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠈⠻⠿⠿⠓⠄⠤⠘⠉⠙⠤⢀⠾⠿⣿⠟⠋]],
+      },
+      sections = {
+        { section = "header" },
+        { icon = " ", title = "Recent Files", section = "recent_files", limit = 8, padding = 1 },
+        {
+          pane = 2,
+          icon = " ",
+          desc = "Browse Repo",
+          padding = 1,
+          key = "b",
+          action = function()
+            Snacks.gitbrowse()
+          end,
+        },
+        function()
+          local in_git = Snacks.git.get_root() ~= nil
+          local cmds = {
+            {
+              title = "Git Status",
+              cmd = "git status --short --branch --renames",
+              height = 5,
+              icon = " ",
+            },
+            {
+              title = "GitHub Notifications",
+              cmd = "gh notify -s -a -n5 2>/dev/null || echo 'gh not configured'",
+              action = function()
+                vim.ui.open("https://github.com/notifications")
+              end,
+              key = "n",
+              icon = " ",
+              height = 5,
+            },
+            {
+              title = "Open Issues",
+              cmd = "gh issue list -L 3 2>/dev/null || echo 'No issues'",
+              key = "i",
+              action = function()
+                vim.fn.jobstart("gh issue list --web", { detach = true })
+              end,
+              icon = " ",
+              height = 7,
+            },
+            {
+              icon = " ",
+              title = "Open PRs",
+              cmd = "gh pr list -L 3 2>/dev/null || echo 'No PRs'",
+              key = "p",
+              action = function()
+                vim.fn.jobstart("gh pr list --web", { detach = true })
+              end,
+              height = 7,
+            },
+          }
+          return vim.tbl_map(function(cmd)
+            return vim.tbl_extend("force", {
+              pane = 2,
+              section = "terminal",
+              enabled = in_git,
+              padding = 1,
+              ttl = 5 * 60,
+              indent = 3,
+            }, cmd)
+          end, cmds)
+        end,
+        { section = "startup" },
+      },
+    },
+    -- Smooth scrolling (replacement for neoscroll.nvim)
+    scroll = {
+      enabled = true,
+      animate = {
+        duration = { step = 20, total = 250 },
+        easing = "linear",
+      },
+    },
+    -- Cursor animations (disabled in favor of smear-cursor.nvim)
+    animate = {
+      enabled = false,
+    },
+    -- Better notifications
+    notifier = {
+      enabled = true,
+      timeout = 3000,
+    },
+    -- LSP rename with preview
+    rename = {
+      enabled = true,
+    },
+    -- Highlight word references
+    words = {
+      enabled = true,
+    },
+    -- Better buffer deletion
+    bufdelete = {
+      enabled = true,
+    },
+    -- Better vim.ui.input
+    input = {
+      enabled = true,
+    },
     -- Enable lazygit integration
     lazygit = { 
       enabled = true,
@@ -122,5 +248,8 @@ return {
       end
     end, desc = "Open/Focus Explorer" },
     { "<leader>E", function() Snacks.explorer() end, desc = "Toggle Explorer" },
+    -- Buffer management
+    { "<leader>dd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
+    { "<leader>daa", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
   },
 }
