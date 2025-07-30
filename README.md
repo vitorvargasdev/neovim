@@ -294,8 +294,7 @@ gh --version        # GitHub CLI should be installed
 ├── lua/
 │   ├── config/
 │   │   ├── nvim.lua       # Core Neovim settings
-│   │   ├── lazy.lua       # Plugin manager setup
-│   │   └── diff-colors.lua # Diff highlighting
+│   │   └── lazy.lua       # Plugin manager setup
 │   └── plugins/           # Plugin configurations
 │       ├── lsp-config.lua # LSP setup
 │       ├── completions.lua # Completion setup

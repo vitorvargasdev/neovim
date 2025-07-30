@@ -42,6 +42,3 @@ vim.opt.titlestring = table.concat({
   "%{fnamemodify(getcwd(),':t')}",    -- CWD basename :contentReference[oaicite:0]{index=0}
   "%t",                               -- filename only :contentReference[oaicite:1]{index=1}
 }, " -- ")
-
--- Load diff colors configuration
-require("config.diff-colors").setup()
