@@ -34,7 +34,7 @@ return {
       },
       sections = {
         { section = "header" },
-        { icon = " ", title = "Recent Files", section = "recent_files", limit = 8, padding = 1 },
+        { icon = " ", title = "Recent Files (Current Project)", section = "recent_files", cwd = true, limit = 8, padding = 1 },
         {
           pane = 2,
           icon = " ",
@@ -247,7 +247,7 @@ return {
         Snacks.explorer()
       end
     end, desc = "Open/Focus Explorer" },
-    { "<leader>E", function() Snacks.explorer() end, desc = "Toggle Explorer" },
+    { "<leader>eq", function() Snacks.explorer() end, desc = "Toggle Explorer" },
     -- Buffer management
     { "<leader>dd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
     { "<leader>daa", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
