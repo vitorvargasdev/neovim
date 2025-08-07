@@ -14,6 +14,7 @@ return {
 		dependencies = {
 			"L3MON4D3/LuaSnip",
 			"rafamadriz/friendly-snippets",
+			"giuxtaposition/blink-cmp-copilot",
 		},
 		opts = {
 			keymap = {
@@ -34,7 +35,15 @@ return {
 			},
 
 			sources = {
-				default = { "lsp", "snippets", "buffer", "path" },
+				default = { "lsp", "copilot", "snippets", "buffer", "path" },
+				providers = {
+					copilot = {
+						name = "copilot",
+						module = "blink-cmp-copilot",
+						score_offset = 100,
+						async = true,
+					},
+				},
 			},
 
 			snippets = {
