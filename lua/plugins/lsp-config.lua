@@ -24,7 +24,6 @@ return {
 					"css-lsp",
 					"tailwindcss-language-server",
 					"eslint-lsp",
-					"copilot-language-server",
 				},
 			})
 		end,
@@ -100,12 +99,12 @@ return {
 			})
 
 			-- Copilot Language Server
-			lspconfig.copilot.setup({
-				capabilities = capabilities,
-				cmd = { "copilot-language-server", "--stdio" },
-				filetypes = { "*" },
-				root_dir = lspconfig.util.root_pattern(".git"),
-			})
+			-- lspconfig.copilot.setup({
+			-- 	capabilities = capabilities,
+			-- 	cmd = { "copilot-language-server", "--stdio" },
+			-- 	filetypes = { "*" },
+			-- 	root_dir = lspconfig.util.root_pattern(".git"),
+			-- })
 
 			-- Key mappings
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
