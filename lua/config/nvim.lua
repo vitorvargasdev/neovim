@@ -10,6 +10,10 @@ vim.cmd("set smartcase")
 vim.cmd("set splitright")
 vim.cmd("set title")
 
+-- Line ending settings to prevent ^M characters
+vim.opt.fileformats = "unix,dos"  -- Prefer Unix line endings
+vim.opt.fileformat = "unix"       -- Use Unix line endings for new files
+
 vim.g.mapleader = " "
 
 vim.keymap.set("n", "<C-h>", "<C-w>h")
