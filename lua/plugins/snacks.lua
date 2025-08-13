@@ -157,26 +157,79 @@ return {
       enabled = true,
       toggles = {
         dim = true,
-        git_signs = false,
-        mini_diff_signs = false,
+        git_signs = true,  -- Show git changes
+        mini_diff_signs = true,  -- Show mini diff signs
         diagnostics = false,
         inlay_hints = false,
+        -- Hide more distractions for better focus
+        number = false,
+        relativenumber = false,
+        signcolumn = true,  -- Keep signcolumn for git signs
+        foldcolumn = false,
+        cursorline = false,
+        colorcolumn = false,
+        spell = false,
+        list = false,
       },
       show = {
         statusline = false,
         tabline = false,
+        -- Hide command line when not in use
+        ruler = false,
+        showcmd = false,
       },
       win = {
-        width = 120,
+        -- Use full screen width (0 = full width in Snacks.nvim)
+        width = 0,
+        -- Configure backdrop for better focus
         backdrop = {
-          transparent = true,
-          blend = 60,
+          transparent = false,
+          -- Maximum blend for ultimate focus
+          blend = 90,
+        },
+        -- Add padding around the window
+        wo = {
+          -- Add virtual text padding
+          number = false,
+          relativenumber = false,
+          cursorline = false,
+          cursorcolumn = false,
+          foldcolumn = "0",
+          signcolumn = "yes",  -- Show signcolumn for git signs
+          colorcolumn = "",
+          spell = false,
+          list = false,
+          -- Smooth scrolling margins
+          scrolloff = 10,
+          sidescrolloff = 15,
+          -- Clean wrap settings
+          wrap = true,
+          linebreak = true,
         },
       },
+      -- Animation for smooth transitions
+      animate = {
+        enabled = true,
+        duration = {
+          step = 10,
+          total = 150,
+        },
+      },
+      -- Callbacks for additional customization
+      on_open = function()
+        -- Optional: Set a clean colorscheme or adjust highlights
+        vim.cmd("set laststatus=0")
+        vim.cmd("set cmdheight=0")
+      end,
+      on_close = function()
+        -- Restore settings
+        vim.cmd("set laststatus=2")
+        vim.cmd("set cmdheight=1")
+      end,
     },
     -- Enable explorer as a file browser
     explorer = {
-      enabled = true,
+      enabled = false,
     },
     -- Configure picker for explorer sidebar
     picker = {
@@ -229,25 +282,9 @@ return {
     -- Zen mode keybindings
     { "<leader>z", function() Snacks.zen() end, desc = "Toggle Zen Mode" },
     { "<leader>Z", function() Snacks.zen.zoom() end, desc = "Toggle Zoom" },
-    -- Explorer keybindings
-    { "<leader>e", function()
-      -- Sempre abre/foca no explorer (nunca fecha)
-      local explorer_win = nil
-      for _, win in ipairs(vim.api.nvim_list_wins()) do
-        local buf = vim.api.nvim_win_get_buf(win)
-        local ft = vim.bo[buf].filetype
-        if ft == 'snacks_picker_list' then
-          explorer_win = win
-          break
-        end
-      end
-      if explorer_win and vim.api.nvim_win_is_valid(explorer_win) then
-        vim.api.nvim_set_current_win(explorer_win)
-      else
-        Snacks.explorer()
-      end
-    end, desc = "Open/Focus Explorer" },
-    { "<leader>eq", function() Snacks.explorer() end, desc = "Toggle Explorer" },
+    -- Explorer keybindings (disabled - using telescope instead)
+    -- { "<leader>e", function() Snacks.explorer() end, desc = "Open/Focus Explorer" },
+    -- { "<leader>eq", function() Snacks.explorer() end, desc = "Toggle Explorer" },
     -- Buffer management
     { "<leader>dd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
     { "<leader>daa", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
