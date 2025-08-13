@@ -13,6 +13,25 @@ return {
 			vim.keymap.set("n", "<leader>gc", ":Git commit<CR>", { desc = "Git commit" })
 		end,
 	},
+	{
+		"NeogitOrg/neogit",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"sindrets/diffview.nvim",
+			"nvim-telescope/telescope.nvim",
+		},
+		config = function()
+			require("neogit").setup({
+				integrations = {
+					telescope = true,
+					diffview = true,
+				},
+			})
+			
+			vim.keymap.set("n", "<leader>gg", ":Neogit<CR>", { desc = "Open Neogit" })
+			vim.keymap.set("n", "<leader>gn", ":Neogit commit<CR>", { desc = "Neogit commit" })
+		end,
+	},
 	-- Gitsigns disabled in favor of mini.diff
 	-- {
 	--   "lewis6991/gitsigns.nvim",
