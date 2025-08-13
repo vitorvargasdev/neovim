@@ -10,6 +10,10 @@ return {
 					native_lsp = {
 						enabled = true,
 					},
+					telescope = {
+						enabled = true,
+						style = "nvchad",
+					},
 				},
 				custom_highlights = function(colors)
 					return {
