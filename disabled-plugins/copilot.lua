@@ -24,7 +24,7 @@ return {
         auto_trigger = true,
         debounce = 75,
         keymap = {
-          accept = "<C-k>",
+          accept = "<S-Tab>",
           accept_word = "<C-j>",
           accept_line = false,
           next = "<C-l>",

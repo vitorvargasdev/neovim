@@ -12,14 +12,11 @@ return {
 		config = function()
 			require("mason-lspconfig").setup({
 				ensure_installed = {
-					"lua_ls",
+					"lua-language-server",
 					"vtsls",
 					"gopls",
-					"golangci-lint",
-					"typescript-language-server",
-					"vue-language-server", -- This installs Volar
+					"vue-language-server",
 					"intelephense",
-					"php-cs-fixer",
 					"terraform-ls",
 					"css-lsp",
 					"tailwindcss-language-server",
@@ -34,79 +31,75 @@ return {
 		config = function()
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-			-- Add folding capabilities for nvim-ufo
 			capabilities.textDocument.foldingRange = {
 				dynamicRegistration = false,
 				lineFoldingOnly = true,
 			}
 
-			local lspconfig = require("lspconfig")
+			local vue_language_server_path = vim.fn.stdpath("data")
+				.. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
 
-			-- Volar configuration for Vue.js
-			lspconfig.volar.setup({
+			vim.lsp.config("vtsls", {
 				capabilities = capabilities,
-				filetypes = { "vue" }, -- Only handle Vue files for better compatibility
-				init_options = {
-					vue = {
-						hybridMode = false, -- Keep false for better file completion and imports
-					},
-					typescript = {
-						tsdk = vim.fn.getcwd() .. "/node_modules/typescript/lib",
+				settings = {
+					vtsls = {
+						tsserver = {
+							globalPlugins = {
+								{
+									name = "@vue/typescript-plugin",
+									location = vue_language_server_path,
+									languages = { "vue" },
+									configNamespace = "typescript",
+								},
+							},
+						},
 					},
 				},
+				filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
 			})
 
-			-- TypeScript/JavaScript configuration
-			lspconfig.vtsls.setup({
-				capabilities = capabilities,
-				filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact" },
-				-- Exclude .vue files to let Volar handle them completely
-				root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
-			})
-
-			-- Lua LSP
-			lspconfig.lua_ls.setup({
+			vim.lsp.config("vue_ls", {
 				capabilities = capabilities,
 			})
 
-			-- Go LSP
-			lspconfig.gopls.setup({
+			vim.lsp.config("lua_ls", {
 				capabilities = capabilities,
 			})
 
-			-- PHP LSP
-			lspconfig.intelephense.setup({
+			vim.lsp.config("gopls", {
 				capabilities = capabilities,
 			})
 
-			-- Terraform LSP
-			lspconfig.terraformls.setup({
+			vim.lsp.config("intelephense", {
 				capabilities = capabilities,
 			})
 
-			-- CSS LSP
-			lspconfig.cssls.setup({
+			vim.lsp.config("terraformls", {
 				capabilities = capabilities,
 			})
 
-			-- Tailwind CSS LSP
-			lspconfig.tailwindcss.setup({
+			vim.lsp.config("cssls", {
 				capabilities = capabilities,
 			})
 
-			lspconfig.eslint.setup({
+			vim.lsp.config("tailwindcss", {
 				capabilities = capabilities,
 			})
 
-			-- Copilot Language Server
-			-- lspconfig.copilot.setup({
-			-- 	capabilities = capabilities,
-			-- 	cmd = { "copilot-language-server", "--stdio" },
-			-- 	filetypes = { "*" },
-			-- 	root_dir = lspconfig.util.root_pattern(".git"),
-			-- })
+			vim.lsp.config("eslint", {
+				capabilities = capabilities,
+			})
 
-			-- Key mappings
+			vim.lsp.enable("vtsls")
+			vim.lsp.enable("vue_ls")
+			vim.lsp.enable("lua_ls")
+			vim.lsp.enable("gopls")
+			vim.lsp.enable("intelephense")
+			vim.lsp.enable("terraformls")
+			vim.lsp.enable("cssls")
+			vim.lsp.enable("tailwindcss")
+			vim.lsp.enable("eslint")
+
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
 			vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
 			vim.keymap.set("n", "gh", vim.diagnostic.open_float, {})

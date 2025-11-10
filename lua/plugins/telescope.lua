@@ -120,30 +120,37 @@ return {
         },
       })
       local builtin = require("telescope.builtin")
-      vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
+      vim.keymap.set("n", "<leader>ff", function()
+        builtin.find_files({ initial_mode = "insert" })
+      end, { desc = "Telescope find files" })
       vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
       vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
       vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
-      vim.keymap.set("n", "<leader>fa", ":Telescope find_files hidden=true no_ignore=true<CR>")
+      vim.keymap.set("n", "<leader>fa", function()
+        builtin.find_files({ hidden = true, no_ignore = true, initial_mode = "insert" })
+      end, { desc = "Telescope find all files" })
 
       -- Resume last search
       vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "Resume last Telescope search" })
 
+      -- Restore telescope state
+      vim.keymap.set("n", "<leader>fR", builtin.pickers, { desc = "Restore previous Telescope picker" })
+
       -- Git pickers
-      vim.keymap.set("n", "<S-M>", builtin.git_status, { desc = "Telescope git status" })
+      vim.keymap.set("n", "<leader>tg", builtin.git_status, { desc = "Telescope git status" })
       vim.keymap.set("n", "<leader>gb", builtin.git_branches, { desc = "Telescope git branches" })
-      vim.keymap.set("n", "<leader>gh", builtin.git_commits, { desc = "Telescope git commits" })
-      vim.keymap.set("n", "<leader>gH", builtin.git_bcommits, { desc = "Telescope git buffer commits" })
+      -- vim.keymap.set("n", "<leader>gh", builtin.git_commits, { desc = "Telescope git commits" })
+      -- vim.keymap.set("n", "<leader>gH", builtin.git_bcommits, { desc = "Telescope git buffer commits" })
       vim.keymap.set("n", "<leader>gS", builtin.git_stash, { desc = "Telescope git stash" })
 
-      -- File browser keymaps
-      vim.keymap.set(
-        "n",
-        "<leader>e",
-        ":Telescope file_browser path=%:p:h select_buffer=true<CR>",
-        { desc = "File Explorer" }
-      )
-      vim.keymap.set("n", "<leader>E", ":Telescope file_browser<CR>", { desc = "Explorer root" })
+      -- File browser keymaps (disabled - using Snacks explorer instead)
+      -- vim.keymap.set(
+      --   "n",
+      --   "<leader>e",
+      --   ":Telescope file_browser path=%:p:h select_buffer=true<CR>",
+      --   { desc = "File Explorer" }
+      -- )
+      -- vim.keymap.set("n", "<leader>E", ":Telescope file_browser<CR>", { desc = "Explorer root" })
 
       require("telescope").load_extension("ui-select")
       require("telescope").load_extension("file_browser")

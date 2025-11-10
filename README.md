@@ -73,6 +73,9 @@ sudo pacman -S neovim git base-devel nodejs npm
 # Essential tools
 sudo pacman -S ripgrep fd lazygit github-cli
 
+# Delta - Better git diff tool
+sudo pacman -S git-delta
+
 # Clipboard support (choose based on your display server)
 sudo pacman -S xclip          # For X11
 sudo pacman -S wl-clipboard   # For Wayland
@@ -93,6 +96,9 @@ sudo dnf install neovim git gcc gcc-c++ nodejs npm
 
 # Essential tools
 sudo dnf install ripgrep fd-find
+
+# Delta - Better git diff tool
+sudo dnf install git-delta
 
 # Lazygit
 sudo dnf copr enable atim/lazygit -y
@@ -127,6 +133,13 @@ sudo apt install ripgrep
 sudo apt install fd-find
 # Create alias for fd
 ln -s $(which fdfind) ~/.local/bin/fd
+
+# Delta - Better git diff tool (via cargo or download binary)
+# Option 1: Using cargo
+cargo install git-delta
+# Option 2: Download from GitHub releases
+wget https://github.com/dandavison/delta/releases/download/0.16.5/git-delta_0.16.5_amd64.deb
+sudo dpkg -i git-delta_0.16.5_amd64.deb
 
 # Lazygit
 sudo add-apt-repository ppa:lazygit-team/daily
@@ -190,6 +203,23 @@ gh --version        # GitHub CLI should be installed
    ```vim
    :Mason
    ```
+
+5. **Configure Delta for better git diffs** (optional but recommended):
+   ```bash
+   # Set delta as git pager
+   git config --global core.pager "delta"
+   git config --global interactive.diffFilter "delta --color-only"
+   
+   # Configure delta features
+   git config --global delta.navigate true
+   git config --global delta.light false
+   git config --global delta.side-by-side true
+   git config --global delta.line-numbers true
+   git config --global merge.conflictstyle diff3
+   git config --global diff.colorMoved default
+   ```
+   
+   Delta will now be used for all git diffs, including in Neovim's fugitive and diffview plugins.
 
 ## Plugin List
 

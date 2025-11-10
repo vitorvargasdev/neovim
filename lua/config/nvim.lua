@@ -30,6 +30,7 @@ vim.keymap.set("n", "<leader>dd", ":bd<CR>")
 vim.keymap.set("n", "<leader>daa", ":bufdo bd<CR>")
 
 vim.keymap.set("n", "tq", ":qa!<CR>")
+vim.keymap.set("n", "Q", "<C-w>j:q<CR>")
 
 vim.keymap.set("n", "<leader>lp", ":LspRestart volar<CR>:LspRestart vtsls<CR>")
 

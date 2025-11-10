@@ -1,39 +1,39 @@
 return {
 	{
-		"obsidian-nvim/obsidian.nvim",
-		version = "*",
-		lazy = true,
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
+		"MeanderingProgrammer/render-markdown.nvim",
+		ft = { "markdown", "md" },
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		config = function()
-			require("obsidian").setup({
-
-			daily_notes = {
-				folder = "daily",
-				date_format = "%Y-%m-%d",
-				alias_format = "%B %-d, %Y",
-			},
-
-			mappings = {
-				["gf"] = {
-					action = function()
-						return require("obsidian").util.gf_passthrough()
-					end,
-					opts = { noremap = false, expr = true, buffer = true },
+			require("render-markdown").setup({
+				enabled = true,
+				preset = "lazy",
+				heading = {
+					enabled = true,
+					icons = { "# ", "## ", "### ", "#### ", "##### ", "###### " },
 				},
-			},
-
-			ui = {
-				enable = true,
-				update_debounce = 200,
-				checkboxes = {
-					[" "] = { char = "☐", hl_group = "ObsidianTodo" },
-					["x"] = { char = "✔", hl_group = "ObsidianDone" },
-					[">"] = { char = "", hl_group = "ObsidianRightArrow" },
-					["~"] = { char = "󰰱", hl_group = "ObsidianTilde" },
+				code = {
+					enabled = true,
+					sign = false,
+					width = "block",
+					right_pad = 1,
 				},
-			},
+				bullet = {
+					enabled = true,
+					icons = { "•", "◦", "▸", "▹" },
+				},
+				checkbox = {
+					enabled = true,
+					unchecked = { icon = "☐ " },
+					checked = { icon = "✔ " },
+				},
+				quote = {
+					enabled = true,
+					icon = "▎",
+				},
+				pipe_table = {
+					enabled = true,
+					style = "normal",
+				},
 			})
 		end,
 	},
