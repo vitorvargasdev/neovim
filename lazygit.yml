@@ -1,0 +1,9 @@
+# Chained into LG_CONFIG_FILE by lua/plugins/snacks.lua (snacks' own YAML
+# writer can't emit lists of tables). A global custom command overrides
+# lazygit's `q` quit but never fires while typing in a prompt.
+customCommands:
+  - key: q
+    context: global
+    command: nvim --server "$NVIM" --remote-expr "v:lua.LazygitHide()"
+    output: none
+    description: Hide LazyGit (keep state)
