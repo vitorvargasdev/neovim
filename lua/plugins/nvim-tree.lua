@@ -26,7 +26,7 @@ return {
       local api = require("nvim-tree.api")
       
       -- Default mappings
-      api.config.mappings.default_on_attach(bufnr)
+      api.map.on_attach.default(bufnr)
       
       -- Custom mappings
       local function opts(desc)
@@ -35,6 +35,10 @@ return {
       
       -- Use 'l' to open files and folders
       vim.keymap.set("n", "l", api.node.open.edit, opts("Open"))
+      -- Use 'L' to open files on the right side (vertical split)
+      vim.keymap.set("n", "L", api.node.open.vertical, opts("Open: Vertical Split"))
+      -- Use 'H' to open files on horizontal split
+      vim.keymap.set("n", "H", api.node.open.horizontal, opts("Open: Horizontal Split"))
       -- Use 'h' to close folders
       vim.keymap.set("n", "h", api.node.navigate.parent_close, opts("Close Directory"))
       -- Use 'z' to close all folders

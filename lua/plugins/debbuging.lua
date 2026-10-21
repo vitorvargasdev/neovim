@@ -4,6 +4,11 @@ return {
     "rcarriga/nvim-dap-ui",
     "nvim-neotest/nvim-nio",
   },
+  keys = {
+    { "<Leader>dt", function() require("dap").toggle_breakpoint() end, desc = "DAP toggle breakpoint" },
+    { "<Leader>dc", function() require("dap").continue() end, desc = "DAP continue" },
+    { "<Leader>dx", function() require("dap").terminate() end, desc = "DAP terminate" },
+  },
   config = function()
     local dap, dapui = require("dap"), require("dapui")
 
@@ -22,18 +27,21 @@ return {
       dapui.close()
     end
 
+    -- installed by mason-tool-installer (lsp-config.lua)
+    local lldebugger = vim.fn.stdpath("data") .. "/mason/packages/local-lua-debugger-vscode/extension"
+
     dap.adapters["local-lua"] = {
       type = "executable",
       command = "node",
       args = {
-        "/home/vitor/dev/local-lua-debugger-vscode/extension/debugAdapter.js",
+        lldebugger .. "/extension/debugAdapter.js",
       },
       enrich_config = function(config, on_config)
         if not config["extensionPath"] then
           local c = vim.deepcopy(config)
           -- 💀 If this is missing or wrong you'll see
           -- "module 'lldebugger' not found" errors in the dap-repl when trying to launch a debug session
-          c.extensionPath = "/home/vitor/dev/local-lua-debugger-vscode/"
+          c.extensionPath = lldebugger
           on_config(c)
         else
           on_config(config)
@@ -67,9 +75,5 @@ return {
         args = {},
       },
     }
-
-    vim.keymap.set("n", "<Leader>dt", dap.toggle_breakpoint, {})
-    vim.keymap.set("n", "<Leader>dc", dap.continue, {})
-    vim.keymap.set("n", "<Leader>dx", dap.terminate, {})
   end,
 }

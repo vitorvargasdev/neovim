@@ -1,6 +1,7 @@
 return {
   "mikavilpas/yazi.nvim",
   branch = "main", -- Force main branch for latest updates
+  enabled = vim.fn.executable("yazi") == 1,
   event = "VeryLazy",
   dependencies = {
     "nvim-lua/plenary.nvim",
