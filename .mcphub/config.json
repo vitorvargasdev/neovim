@@ -1,3 +1,11 @@
 {
-  "servers": {}
+  "servers": {
+    "claude-code": {
+      "name": "Claude Code",
+      "description": "Claude Code AI Assistant",
+      "command": "claude",
+      "args": ["mcp", "serve"],
+      "enabled": true
+    }
+  }
 }
