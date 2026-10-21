@@ -1,16 +1,72 @@
 return {
 	{
 		"tpope/vim-fugitive",
+		cmd = { "G", "Git", "Gvdiffsplit", "Gdiffsplit", "Gread", "Gwrite", "GBrowse" },
+		keys = {
+			{ "<leader>gt", "<cmd>Git blame<CR>", desc = "Git blame (fugitive)" },
+			{ "<leader>gr", "<cmd>e!<CR>", desc = "Refresh current buffer" },
+			{ "<leader>gs", "<cmd>Git<CR>", desc = "Git status" },
+			{ "<leader>gd", "<cmd>Gvdiffsplit<CR>", desc = "Git diff split" },
+			{ "<leader>gl", "<cmd>Git log --oneline<CR>", desc = "Git log" },
+			{ "<leader>gc", "<cmd>Git commit<CR>", desc = "Git commit" },
+		},
+	},
+	{
+		"sindrets/diffview.nvim",
+		cmd = { "DiffviewOpen", "DiffviewFileHistory", "DiffviewClose", "DiffviewToggleFiles" },
+		keys = {
+			{
+				"M",
+				function()
+					local lib = require("diffview.lib")
+					-- drop views whose tab was closed by hand
+					lib.dispose_stray_views()
+					if lib.get_current_view() then
+						vim.cmd("DiffviewClose")
+					elseif lib.views[1] then
+						-- a view is open in another tab: jump to it instead of opening a second one
+						vim.api.nvim_set_current_tabpage(lib.views[1].tabpage)
+					else
+						vim.cmd("DiffviewOpen")
+					end
+				end,
+				desc = "Diffview Toggle",
+			},
+		},
 		config = function()
-			-- Git blame using fugitive
-			vim.keymap.set("n", "<leader>gt", ":Git blame<CR>", { desc = "Git blame (fugitive)" })
-			vim.keymap.set("n", "<leader>gr", ":e!<CR>", { desc = "Refresh current buffer" })
-			
-			-- Additional useful fugitive commands
-			vim.keymap.set("n", "<leader>gs", ":Git<CR>", { desc = "Git status" })
-			vim.keymap.set("n", "<leader>gd", ":Gvdiffsplit<CR>", { desc = "Git diff split" })
-			vim.keymap.set("n", "<leader>gl", ":Git log --oneline<CR>", { desc = "Git log" })
-			vim.keymap.set("n", "<leader>gc", ":Git commit<CR>", { desc = "Git commit" })
+			local actions = require("diffview.actions")
+			local lib = require("diffview.lib")
+
+			-- goto_file_edit leaves the Diffview tab, so grab the view before it
+			local function open_and_close()
+				local view = lib.get_current_view()
+				actions.goto_file_edit()
+				if view then
+					view:close()
+					lib.dispose_view(view)
+				end
+			end
+
+			require("diffview").setup({
+				keymaps = {
+					file_panel = {
+						{
+							"n",
+							"gf",
+							open_and_close,
+							{ desc = "Open file and close Diffview" },
+						},
+					},
+					view = {
+						{
+							"n",
+							"gf",
+							open_and_close,
+							{ desc = "Open file and close Diffview" },
+						},
+					},
+				},
+			})
 		end,
 	},
 	{
@@ -20,26 +76,16 @@ return {
 			"sindrets/diffview.nvim",
 			"nvim-telescope/telescope.nvim",
 		},
-		config = function()
-			require("neogit").setup({
-				integrations = {
-					telescope = true,
-					diffview = true,
-				},
-			})
-			
-			vim.keymap.set("n", "<leader>gg", ":Neogit<CR>", { desc = "Open Neogit" })
-			vim.keymap.set("n", "<leader>gn", ":Neogit commit<CR>", { desc = "Neogit commit" })
-		end,
+		cmd = "Neogit",
+		keys = {
+			{ "<leader>gg", "<cmd>Neogit<CR>", desc = "Open Neogit" },
+			{ "<leader>gn", "<cmd>Neogit commit<CR>", desc = "Neogit commit" },
+		},
+		opts = {
+			integrations = {
+				telescope = true,
+				diffview = true,
+			},
+		},
 	},
-	-- Gitsigns disabled in favor of mini.diff
-	-- {
-	--   "lewis6991/gitsigns.nvim",
-	--   config = function()
-	--     require("gitsigns").setup()
-	--
-	--     vim.keymap.set("n", "<leader>gt", ":Gitsigns blame_line<CR>", { desc = "Git blame line" })
-	--     vim.keymap.set("n", "<leader>gr", ":Gitsigns refresh<CR>", { desc = "Refresh gitsigns" })
-	--   end
-	-- }
 }

@@ -12,9 +12,6 @@ return {
 			},
 		},
 
-		-- Source configuration (using Git by default)
-		source = nil, -- Will use default Git source
-
 		-- Delay before updating diff
 		delay = {
 			text_change = 200,
@@ -70,24 +67,12 @@ return {
 			callback = set_mini_diff_colors,
 		})
 
-		-- Also set colors after Neovim fully starts (to override any late-loading colorscheme settings)
-		vim.api.nvim_create_autocmd("VimEnter", {
-			pattern = "*",
-			callback = function()
-				vim.defer_fn(set_mini_diff_colors, 100) -- Small delay to ensure everything is loaded
-			end,
-		})
-
-		-- Custom keymaps similar to gitsigns
+		-- Toggle inline diff overlay in the current buffer
 		vim.keymap.set("n", "m", function()
-			require("mini.diff").toggle_overlay(0)
-		end, { desc = "Toggle diff overlay (preview)" })
-
-		vim.keymap.set("n", "<leader>gd", function()
 			require("mini.diff").toggle_overlay(0)
 		end, { desc = "Git diff (mini.diff overlay)" })
 
-		-- Navigation without preview
+		-- Navigation between hunks
 		vim.keymap.set("n", ",", function()
 			require("mini.diff").goto_hunk("prev", { wrap = true })
 		end, { desc = "Previous hunk" })
@@ -95,20 +80,5 @@ return {
 		vim.keymap.set("n", ".", function()
 			require("mini.diff").goto_hunk("next", { wrap = true })
 		end, { desc = "Next hunk" })
-
-		-- Navigation with automatic preview (shift+, and shift+.)
-		vim.keymap.set("n", "<", function()
-			require("mini.diff").goto_hunk("prev", { wrap = true })
-			vim.defer_fn(function()
-				require("mini.diff").toggle_overlay(0)
-			end, 50)
-		end, { desc = "Previous hunk + preview" })
-
-		vim.keymap.set("n", ">", function()
-			require("mini.diff").goto_hunk("next", { wrap = true })
-			vim.defer_fn(function()
-				require("mini.diff").toggle_overlay(0)
-			end, 50)
-		end, { desc = "Next hunk + preview" })
 	end,
 }

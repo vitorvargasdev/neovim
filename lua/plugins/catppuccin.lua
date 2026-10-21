@@ -5,16 +5,6 @@ return {
 		priority = 1000,
 		config = function()
 			require("catppuccin").setup({
-				integrations = {
-					gitsigns = false, -- We're using mini.diff instead
-					native_lsp = {
-						enabled = true,
-					},
-					telescope = {
-						enabled = true,
-						style = "nvchad",
-					},
-				},
 				custom_highlights = function(colors)
 					return {
 						-- GitHub-style diff colors with better visibility
