@@ -15,14 +15,26 @@ return {
 						return utils.has_file({ ".prettierrc.js" })
 					end,
 				}),
+				null_ls.builtins.formatting.phpcsfixer.with({
+					condition = function(utils)
+						return utils.has_file({ ".php-cs-fixer.php", ".php-cs-fixer.dist.php" })
+					end,
+				}),
 				null_ls.builtins.diagnostics.golangci_lint,
-				require("none-ls.diagnostics.eslint_d"), -- requires none-ls-extras.nvim
-				-- null_ls.builtins.diagnostics.phpcs,
-				null_ls.builtins.diagnostics.phpstan,
+				null_ls.builtins.diagnostics.phpcs.with({
+					condition = function(utils)
+						return utils.has_file({ "phpcs.xml", "phpcs.xml.dist", ".phpcs.xml", ".phpcs.xml.dist" })
+					end,
+				}),
+				null_ls.builtins.diagnostics.phpstan.with({
+					condition = function(utils)
+						return utils.has_file({ "phpstan.neon", "phpstan.neon.dist", "phpstan.dist.neon" })
+					end,
+				}),
 			},
 		})
 
 		vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
-		vim.keymap.set("n", "<leader>gc", ":EslintFixAll<CR>")
+		vim.keymap.set("n", "<leader>ge", "<cmd>LspEslintFixAll<CR>", { desc = "ESLint fix all" })
 	end,
 }
