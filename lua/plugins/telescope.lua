@@ -3,16 +3,12 @@ return {
     "nvim-telescope/telescope-ui-select.nvim",
   },
   {
-    "nvim-telescope/telescope-file-browser.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
-  },
-  {
     "nvim-telescope/telescope-fzf-native.nvim",
     build = "make",
   },
   {
     "nvim-telescope/telescope.nvim",
-    tag = "0.1.8",
+    branch = "master",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope-fzf-native.nvim",
@@ -68,17 +64,8 @@ return {
             "%.ttf",
           },
 
-          -- Preview settings
-          preview = {
-            treesitter = true,
-          },
-
           -- Colors and icons
           color_devicons = true,
-
-          -- Better performance
-          file_sorter = require("telescope.sorters").get_fuzzy_file,
-          generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
 
           -- Mappings
           mappings = {
@@ -87,6 +74,8 @@ return {
               ["e"] = false, -- Disable 'e' key in all pickers
               ["l"] = require("telescope.actions").select_default,
               ["h"] = require("telescope.actions").close,
+              ["<S-l>"] = require("telescope.actions").select_vertical, -- Vertical split
+              ["<S-h>"] = require("telescope.actions").select_horizontal, -- Horizontal split
               ["<S-j>"] = require("telescope.actions").preview_scrolling_down,
               ["<S-k>"] = require("telescope.actions").preview_scrolling_up,
             },
@@ -100,30 +89,20 @@ return {
           ["ui-select"] = {
             require("telescope.themes").get_dropdown({}),
           },
-          file_browser = {
-            initial_mode = "normal",
-            grouped = true, -- Group folders before files
-            files = true, -- Show both files and folders
-            dir_icon = "󰉋", -- Nerd font folder icon
-            display_stat = false,
-            git_status = true, -- Show git status indicators
-            sorting_strategy = "ascending", -- Show results from top to bottom
-            mappings = {
-              ["n"] = {
-                ["l"] = require("telescope.actions").select_default,
-                ["h"] = require("telescope").extensions.file_browser.actions.goto_parent_dir,
-                ["q"] = require("telescope.actions").close,
-                ["e"] = false, -- Disable 'e' key to prevent conflicts
-              },
-            },
-          },
         },
       })
       local builtin = require("telescope.builtin")
       vim.keymap.set("n", "<leader>ff", function()
         builtin.find_files({ initial_mode = "insert" })
       end, { desc = "Telescope find files" })
-      vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
+      vim.keymap.set("n", "<leader>fg", function()
+        builtin.live_grep({ initial_mode = "insert" })
+      end, { desc = "Telescope live grep" })
+      vim.keymap.set("v", "<leader>fy", function()
+        -- prompt is single-line; match the selection literally, not as a regex
+        local text = vim.fn.getregion(vim.fn.getpos("v"), vim.fn.getpos("."))[1]
+        builtin.live_grep({ default_text = text, additional_args = { "--fixed-strings" }, initial_mode = "normal" })
+      end, { desc = "Telescope grep selected text" })
       vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
       vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
       vim.keymap.set("n", "<leader>fa", function()
@@ -138,22 +117,11 @@ return {
 
       -- Git pickers
       vim.keymap.set("n", "<leader>tg", builtin.git_status, { desc = "Telescope git status" })
-      vim.keymap.set("n", "<leader>gb", builtin.git_branches, { desc = "Telescope git branches" })
       -- vim.keymap.set("n", "<leader>gh", builtin.git_commits, { desc = "Telescope git commits" })
       -- vim.keymap.set("n", "<leader>gH", builtin.git_bcommits, { desc = "Telescope git buffer commits" })
       vim.keymap.set("n", "<leader>gS", builtin.git_stash, { desc = "Telescope git stash" })
 
-      -- File browser keymaps (disabled - using Snacks explorer instead)
-      -- vim.keymap.set(
-      --   "n",
-      --   "<leader>e",
-      --   ":Telescope file_browser path=%:p:h select_buffer=true<CR>",
-      --   { desc = "File Explorer" }
-      -- )
-      -- vim.keymap.set("n", "<leader>E", ":Telescope file_browser<CR>", { desc = "Explorer root" })
-
       require("telescope").load_extension("ui-select")
-      require("telescope").load_extension("file_browser")
       require("telescope").load_extension("fzf")
     end,
   },
